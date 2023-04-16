@@ -12,14 +12,6 @@ log_config = {
             "formatter": "simple",
             "stream": "ext://sys.stdout"
         },
-        "file": {
-            "class": "logging.FileHandler",
-            "level": "DEBUG",
-            "formatter": "simple",
-            "filename": "debug.log",
-            "encoding": "utf8",
-            "mode": "a"
-        }
     },
     "loggers": {
         "myLogger": {
@@ -34,7 +26,6 @@ log_config = {
         "level": "DEBUG",
         "handlers": [
             "console",
-            "file"
         ]
     }
 }

@@ -61,6 +61,8 @@ async def paginate(query: str, session: aiohttp.ClientSession, config: dict, out
     api = 'https://api.twitter.com/2/search/adaptive.json?'
     config['q'] = query
     data, next_cursor = await backoff(lambda: get(session, api, config), query)
+    if data is None:
+        return []
     all_data = [data]
     c = colors.pop() if colors else ''
     ids = set()
@@ -81,7 +83,7 @@ async def paginate(query: str, session: aiohttp.ClientSession, config: dict, out
     return all_data
 
 
-async def backoff(fn, info, retries=12):
+async def backoff(fn, info, retries=3):
     for i in range(retries + 1):
         try:
             data, next_cursor = await fn()
@@ -91,7 +93,7 @@ async def backoff(fn, info, retries=12):
         except Exception as e:
             if i == retries:
                 logger.debug(f'Max retries exceeded\n{e}')
-                return
+                return None, None
             t = 2 ** i + random.random()
             logger.debug(
                 f'No data for: \u001b[1m{info}\u001b[0m | retrying in {f"{t:.2f}"} seconds\t\t{e}')
