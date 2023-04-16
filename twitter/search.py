@@ -74,6 +74,8 @@ async def paginate(query: str, session: aiohttp.ClientSession, config: dict, out
         # logger.debug(f'{c}{query}{reset}')
         config['cursor'] = next_cursor
         data, next_cursor = await backoff(lambda: get(session, api, config), query)
+        if data is None:
+            return all_data
         data['query'] = query
         # (out / f'raw/{time.time_ns()}.json').write_text(
         #   orjson.dumps(data, option=orjson.OPT_INDENT_2).decode(),
