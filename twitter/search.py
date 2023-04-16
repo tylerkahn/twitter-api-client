@@ -90,10 +90,11 @@ async def backoff(fn, info, retries=12):
             return data, next_cursor
         except Exception as e:
             if i == retries:
-                # logger.debug(f'Max retries exceeded\n{e}')
+                logger.debug(f'Max retries exceeded\n{e}')
                 return
             t = 2 ** i + random.random()
-            # logger.debug(f'No data for: \u001b[1m{info}\u001b[0m | retrying in {f"{t:.2f}"} seconds\t\t{e}')
+            logger.debug(
+                f'No data for: \u001b[1m{info}\u001b[0m | retrying in {f"{t:.2f}"} seconds\t\t{e}')
             time.sleep(t)
 
 
