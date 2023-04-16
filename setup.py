@@ -14,7 +14,7 @@ install_requires = [
 setup(
     name="twitter-api-client",
     version="0.6.4",
-    python_requires=">=3.11.0",
+    python_requires=">=3.10.0",
     description="Twitter API",
     long_description=dedent('''
     Complete implementation of the undocumented Twitter API
