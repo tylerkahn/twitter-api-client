@@ -19,7 +19,8 @@ from .constants import *
 from .utils import set_qs
 
 IN_PATH = Path('~/data/raw').expanduser()
-OUT_PATH = Path(f'~/data/processed/search_results_{time.time_ns()}.json').expanduser()
+OUT_PATH = Path(
+    f'~/data/processed/search_results_{time.time_ns()}.json').expanduser()
 
 reset = '\u001b[0m'
 colors = [f'\u001b[{i}m' for i in range(30, 38)]
@@ -46,7 +47,7 @@ else:
 
 
 def search(*args, out: str = 'data', **kwargs):
-    out_path = make_output_dirs(out)
+    out_path = ""  # make_output_dirs(out)
     return asyncio.run(process(args, search_config, out_path, **kwargs))
 
 
@@ -66,16 +67,16 @@ async def paginate(query: str, session: aiohttp.ClientSession, config: dict, out
     while next_cursor:
         ids |= set(data['globalObjects']['tweets'])
         if len(ids) >= kwargs.get('limit', math.inf):
-            logger.debug(f'[{SUCCESS}success{RESET}] returned {len(ids)} search results for {c}{query}{reset}')
+            # logger.debug(f'[{SUCCESS}success{RESET}] returned {len(ids)} search results for {c}{query}{reset}')
             return all_data
-        logger.debug(f'{c}{query}{reset}')
+        # logger.debug(f'{c}{query}{reset}')
         config['cursor'] = next_cursor
         data, next_cursor = await backoff(lambda: get(session, api, config), query)
         data['query'] = query
-        (out / f'raw/{time.time_ns()}.json').write_text(
-            orjson.dumps(data, option=orjson.OPT_INDENT_2).decode(),
-            encoding='utf-8'
-        )
+        # (out / f'raw/{time.time_ns()}.json').write_text(
+        #   orjson.dumps(data, option=orjson.OPT_INDENT_2).decode(),
+        #   encoding='utf-8'
+        #
         all_data.append(data)
     return all_data
 
@@ -89,10 +90,10 @@ async def backoff(fn, info, retries=12):
             return data, next_cursor
         except Exception as e:
             if i == retries:
-                logger.debug(f'Max retries exceeded\n{e}')
+                # logger.debug(f'Max retries exceeded\n{e}')
                 return
             t = 2 ** i + random.random()
-            logger.debug(f'No data for: \u001b[1m{info}\u001b[0m | retrying in {f"{t:.2f}"} seconds\t\t{e}')
+            # logger.debug(f'No data for: \u001b[1m{info}\u001b[0m | retrying in {f"{t:.2f}"} seconds\t\t{e}')
             time.sleep(t)
 
 
@@ -131,7 +132,8 @@ def __get_headers(fname: str = None) -> dict:
         'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs=1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
-    r = requests.post('https://api.twitter.com/1.1/guest/activate.json', headers=headers)
+    r = requests.post(
+        'https://api.twitter.com/1.1/guest/activate.json', headers=headers)
     headers['x-guest-token'] = r.json()['guest_token']
     return headers
 
