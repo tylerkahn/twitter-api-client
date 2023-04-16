@@ -42,7 +42,7 @@ account_settings = {
     "translator_type": "none",
     "universal_quality_filtering_enabled": "enabled",
     "use_cookie_personalization": False,
-    ## todo: not yet implemented - requires additional steps
+    # todo: not yet implemented - requires additional steps
     # "allow_contributor_request": "all",
     # "protect_password_reset": False,
 }
@@ -125,6 +125,7 @@ search_config = {
     "include_ext_trusted_friends_metadata": "true",
     "send_error_codes": "true",
     "simple_quoted_tweet": "true",
+    "result_type": "recent",
     "query_source": "typed_query",
     "count": 1000,
     "q": "",
